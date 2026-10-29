@@ -1,0 +1,14 @@
+{
+  "name": "IPTV test app",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "IPTV app",
+      "onAutoForward": "notify",
+      "visibility": "private"
+    }
+  },
+  "postCreateCommand": "npm ci && npm run build",
+  "postStartCommand": "if [ ! -s .env ]; then printf 'NODE_ENV=production\\nPORT=3000\\nAPP_SECRET_KEY=%s\\nJWT_SECRET=%s\\n' \"$(openssl rand -hex 32)\" \"$(openssl rand -hex 48)\" > .env; fi; nohup npm run server > /tmp/iptv-server.log 2>&1 &"
+}
